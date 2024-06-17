@@ -1,1 +1,5 @@
-{{users$ | async | json}}
+<ul>
+  @for (user of users$ | async; track user.id) {
+  <app-user-row [user]="user"></app-user-row>
+  }
+</ul>
