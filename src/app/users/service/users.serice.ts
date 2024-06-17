@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, delay, of } from 'rxjs';
+
+const DELAY = 1000;
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
@@ -23,17 +25,19 @@ export class UsersService {
     { id: 'u17', user_name: 'Ivan Q.', is_active: true },
   ];
 
-  getList(request: ListRequest): Observable<UserListResponseDto> {
-    // TODO: implement
+  getList(request?: ListRequest): Observable<UserListResponseDto> {
+    return of({ items: this.DB, total_count: this.DB.length }).pipe(
+      delay(DELAY)
+    );
   }
 
-  getById(id: string): Observable<UserDto> {
-    // TODO: implement
-  }
+  // getById(id: string): Observable<UserDto> {
+  //   // TODO: implement
+  // }
 
-  remove(id: string): Observable<void> {
-    // TODO: implement
-  }
+  // remove(id: string): Observable<void> {
+  //   // TODO: implement
+  // }
 }
 
 export interface UserDto {

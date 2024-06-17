@@ -2,10 +2,10 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnInit,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   NavigationCancel,
   NavigationEnd,
@@ -49,8 +49,9 @@ export class AppComponent implements OnInit {
               break;
             }
           }
-        }),
-        takeUntilDestroyed()
+        })
+        // no need to unsubscribe since app component has application long life
+        // takeUntilDestroyed()
       )
       .subscribe();
   }
