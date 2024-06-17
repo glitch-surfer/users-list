@@ -1,5 +1,20 @@
-<ul>
-  @for (user of users$ | async; track user.id) {
+<label>
+  Select view:
+  <select [formControl]="selectViewOption">
+    <option value="none" disabled>view options</option>
+    <option value="list">List</option>
+    <option value="cards">Cards</option>
+  </select>
+</label>
+
+<ul
+  class="users"
+  [class.list-view]="(selectViewOption.valueChanges | async) === 'list'"
+>
+  @for (user of users$ | async; track user.id) { @if
+  ((selectViewOption.valueChanges | async) === 'list') {
   <app-user-row [user]="user"></app-user-row>
-  }
+  } @else {
+  <app-user-card [user]="user"></app-user-card>
+  } }
 </ul>
