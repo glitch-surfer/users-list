@@ -2,5 +2,8 @@
   <h1>Users List</h1>
 </header>
 <main>
+  @if (isLoading$ | async) {
+  <p>Loading...</p>
+  }
   <router-outlet />
 </main>
