@@ -1,12 +1,22 @@
-<label>
-  Select view:
-  <select [formControl]="selectViewOption">
-    <option value="none" disabled>view options</option>
-    <option value="list">List</option>
-    <option value="cards">Cards</option>
-  </select>
-</label>
+<div class="controls">
+  <label>
+    Select view:
+    <select [formControl]="selectViewOption">
+      <option value="none" disabled>view options</option>
+      <option value="list">List</option>
+      <option value="cards">Cards</option>
+    </select>
+  </label>
 
+  <label>
+    Search:
+    <input #searchInput type="text" />
+  </label>
+</div>
+
+@if (isLoading$ | async) {
+<p>Loading...</p>
+} @else {
 <ul
   class="users"
   [class.list-view]="(selectViewOption.valueChanges | async) === 'list'"
@@ -18,3 +28,4 @@
   <app-user-card [user]="user"></app-user-card>
   } }
 </ul>
+}

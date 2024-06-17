@@ -31,6 +31,12 @@ export class UsersService {
     );
   }
 
+  searchByName(name: string): Observable<UserDto[]> {
+    return of(
+      this.DB.filter((user) => user.user_name.toLowerCase().includes(name))
+    ).pipe(delay(DELAY));
+  }
+
   // getById(id: string): Observable<UserDto> {
   //   // TODO: implement
   // }
