@@ -1,10 +1,20 @@
 <div class="controls">
   <label>
-    Select view:
+    View:
     <select [formControl]="selectViewOption">
       <option value="none" disabled>view options</option>
       <option value="list">List</option>
       <option value="cards">Cards</option>
+    </select>
+  </label>
+
+  <label>
+    Items per page:
+    <select [formControl]="selectItemsPerPage">
+      <option value="none" disabled>items per page</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="20">20</option>
     </select>
   </label>
 

@@ -30,6 +30,7 @@ import { UserCardComponent } from '../user-card/user-card.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PaginationComponent } from '../../../core/components/pagination/pagination.component';
 import { ViewMode } from '../../model/view-mode.interface';
+import { ItemsPerPage } from '../../model/items-per-page.interface';
 
 @Component({
   selector: 'app-users-list',
@@ -66,7 +67,9 @@ export class UsersListComponent implements OnInit {
   readonly selectViewOption = new FormControl<ViewMode>('none');
   viewMode: ViewMode = 'list';
 
-  itemsPerPage: ListRequest['itemsPerPage'] = 5;
+  readonly selectItemsPerPage = new FormControl<ItemsPerPage>(5);
+
+  itemsPerPage: ItemsPerPage = 5;
   currentPage = 1;
   totalItems = this.usersData.total_count;
 
@@ -98,6 +101,17 @@ export class UsersListComponent implements OnInit {
     this.selectViewOption.valueChanges
       .pipe(
         tap((viewMode) => viewMode && (this.viewMode = viewMode)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
+
+    this.selectItemsPerPage.valueChanges
+      .pipe(
+        tap(
+          (itemsPerPage) => itemsPerPage && (this.itemsPerPage = itemsPerPage)
+        ),
+        tap(() => (this.currentPage = 1)),
+        tap(() => this.onPageChange(this.currentPage)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();

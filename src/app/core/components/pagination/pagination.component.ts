@@ -5,8 +5,8 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { ListRequest } from '../../../users/service/users.serice';
 import { NgFor } from '@angular/common';
+import { ItemsPerPage } from '../../../users/model/items-per-page.interface';
 
 @Component({
   selector: 'app-pagination',
@@ -17,7 +17,7 @@ import { NgFor } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginationComponent {
-  @Input({ required: true }) itemsPerPage: ListRequest['itemsPerPage'] = 5;
+  @Input({ required: true }) itemsPerPage: ItemsPerPage = 5;
   @Input({ required: true }) totalItems = 0;
   @Input({ required: true }) currentPage = 1;
 
