@@ -45,6 +45,7 @@
   [totalItems]="totalItems"
   [itemsPerPage]="itemsPerPage"
   [currentPage]="currentPage"
+  [isDisabled]="!!(isLoading$ | async)"
   (pageChange)="onPageChange($event)"
 >
 </app-pagination>

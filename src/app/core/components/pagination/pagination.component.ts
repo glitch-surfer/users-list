@@ -20,6 +20,7 @@ export class PaginationComponent {
   @Input({ required: true }) itemsPerPage: ItemsPerPage = 5;
   @Input({ required: true }) totalItems = 0;
   @Input({ required: true }) currentPage = 1;
+  @Input() isDisabled = false;
 
   @Output() pageChange = new EventEmitter<number>();
 
