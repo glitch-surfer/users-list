@@ -129,6 +129,8 @@ export class UsersListComponent implements OnInit {
   }
 
   onRemoveUser(id: string): void {
+    const shouldMoveToPrevPage = this.users$$.value.length === 1;
+
     this.isLoading$$.next(true);
 
     this.usersService
@@ -136,7 +138,9 @@ export class UsersListComponent implements OnInit {
       .pipe(
         switchMap(() =>
           this.getUsers({
-            pageNumber: this.currentPage,
+            pageNumber: shouldMoveToPrevPage
+              ? this.currentPage - 1 || 1
+              : this.currentPage,
             itemsPerPage: this.itemsPerPage,
             search: this.searchInput.nativeElement.value.trim().toLowerCase(),
           })
