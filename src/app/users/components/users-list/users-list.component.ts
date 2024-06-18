@@ -62,6 +62,10 @@ export class UsersListComponent implements OnInit {
   );
   readonly users$ = this.users$$.asObservable();
 
+  get search(): string {
+    return this.searchInput.nativeElement.value.trim().toLowerCase();
+  }
+
   private readonly isLoading$$ = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this.isLoading$$.asObservable();
 
@@ -123,7 +127,7 @@ export class UsersListComponent implements OnInit {
 
     this.getUsers({
       itemsPerPage: this.itemsPerPage,
-      search: this.searchInput.nativeElement.value.trim().toLowerCase(),
+      search: this.search,
       pageNumber,
     }).subscribe();
   }
@@ -142,7 +146,7 @@ export class UsersListComponent implements OnInit {
               ? this.currentPage - 1 || 1
               : this.currentPage,
             itemsPerPage: this.itemsPerPage,
-            search: this.searchInput.nativeElement.value.trim().toLowerCase(),
+            search: this.search,
           })
         ),
         finalize(() => this.isLoading$$.next(false)),
