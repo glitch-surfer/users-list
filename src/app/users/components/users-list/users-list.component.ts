@@ -33,6 +33,8 @@ import { PaginationComponent } from '../../../core/components/pagination/paginat
 import { ViewMode } from '../../model/view-mode.interface';
 import { ItemsPerPage } from '../../model/items-per-page.interface';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '../../const/numbers';
+import { ViewModeSelectComponent } from '../view-mode-select/view-mode-select.component';
+import { ItemsPerPageSelectComponent } from '../items-per-page-select/items-per-page-select.component';
 
 @Component({
   selector: 'app-users-list',
@@ -43,6 +45,8 @@ import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '../../const/numbers';
     ReactiveFormsModule,
     UserCardComponent,
     PaginationComponent,
+    ViewModeSelectComponent,
+    ItemsPerPageSelectComponent,
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',

@@ -1,22 +1,7 @@
 <div class="controls">
-  <label>
-    View:
-    <select [formControl]="selectViewOption">
-      <option value="none" disabled>view options</option>
-      <option value="list">List</option>
-      <option value="cards">Cards</option>
-    </select>
-  </label>
+  <app-view-mode-select [control]="selectViewOption"></app-view-mode-select>
 
-  <label>
-    Items per page:
-    <select [formControl]="selectItemsPerPage">
-      <option value="none" disabled>items per page</option>
-      <option value="5">5</option>
-      <option value="10">10</option>
-      <option value="20">20</option>
-    </select>
-  </label>
+  <app-items-per-page-select [control]="selectItemsPerPage"></app-items-per-page-select>
 
   <label>
     Search:
