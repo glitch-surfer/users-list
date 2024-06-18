@@ -23,6 +23,7 @@ import { UserRowComponent } from '../user-row/user-row.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { UserCardComponent } from '../user-card/user-card.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PaginationComponent } from '../../../core/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-users-list',
@@ -32,6 +33,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     UserRowComponent,
     ReactiveFormsModule,
     UserCardComponent,
+    PaginationComponent,
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
