@@ -1,1 +1,1 @@
-export type ViewMode = 'list' | 'cards' | 'none';
+export type ViewMode = 'list' | 'cards';

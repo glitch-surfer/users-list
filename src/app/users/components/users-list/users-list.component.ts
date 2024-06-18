@@ -70,7 +70,7 @@ export class UsersListComponent implements OnInit {
   private readonly isLoading$$ = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this.isLoading$$.asObservable();
 
-  readonly selectViewOption = new FormControl<ViewMode>('none');
+  readonly selectViewOption = new FormControl<ViewMode>('list');
   viewMode: ViewMode = 'list';
 
   readonly selectItemsPerPage = new FormControl<ItemsPerPage>(5);
