@@ -17,17 +17,19 @@
 @if (isLoading$ | async) {
 <p>Loading...</p>
 } @else {
-<ul
-  class="users"
-  [class.list-view]="(selectViewOption.valueChanges | async) === 'list'"
->
-  @for (user of users$ | async; track user.id) { @if
-  ((selectViewOption.valueChanges | async) === 'list') {
+<ul class="users" [class.list-view]="viewMode === 'list'">
+  @for (user of users$ | async; track user.id) { @if (viewMode === 'list') {
   <app-user-row [user]="user"></app-user-row>
   } @else {
   <app-user-card [user]="user"></app-user-card>
   } }
 </ul>
+} @if ((users$ | async)!.length < totalItems) {
+<app-pagination
+  [totalItems]="totalItems"
+  [itemsPerPage]="itemsPerPage"
+  [currentPage]="currentPage"
+  (pageChange)="onPageChange($event)"
+>
+</app-pagination>
 }
-
-<app-pagination></app-pagination>

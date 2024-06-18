@@ -7,11 +7,16 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { UserDto, UsersService } from '../../service/users.serice';
+import {
+  ListRequest,
+  UserDto,
+  UserListResponseDto,
+  UsersService,
+} from '../../service/users.serice';
 import {
   BehaviorSubject,
-  Subject,
   debounceTime,
+  finalize,
   fromEvent,
   map,
   switchMap,
@@ -24,6 +29,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { UserCardComponent } from '../user-card/user-card.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PaginationComponent } from '../../../core/components/pagination/pagination.component';
+import { ViewMode } from '../../model/view-mode.interface';
 
 @Component({
   selector: 'app-users-list',
@@ -43,20 +49,26 @@ export class UsersListComponent implements OnInit {
   @ViewChild('searchInput', { static: true, read: ElementRef })
   searchInput!: ElementRef<HTMLInputElement>;
 
-  private readonly usersService = inject(UsersService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly usersService = inject(UsersService);
+
+  private readonly usersData: UserListResponseDto =
+    inject(ActivatedRoute).snapshot.data['users'];
 
   private readonly users$$ = new BehaviorSubject<UserDto[]>(
-    inject(ActivatedRoute).snapshot.data['users']
+    this.usersData.items
   );
   readonly users$ = this.users$$.asObservable();
 
   private readonly isLoading$$ = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this.isLoading$$.asObservable();
 
-  readonly searchString$$ = new Subject<string>();
+  readonly selectViewOption = new FormControl<ViewMode>('none');
+  viewMode: ViewMode = 'list';
 
-  readonly selectViewOption = new FormControl('none');
+  itemsPerPage: ListRequest['itemsPerPage'] = 5;
+  currentPage = 1;
+  totalItems = this.usersData.total_count;
 
   ngOnInit(): void {
     fromEvent(this.searchInput.nativeElement, 'input')
@@ -66,9 +78,49 @@ export class UsersListComponent implements OnInit {
         map((event) =>
           (event.target as HTMLInputElement).value.trim().toLowerCase()
         ),
-        switchMap((name) => this.usersService.searchByName(name)),
-        tap((users) => this.users$$.next(users)),
+        switchMap((search) =>
+          this.usersService.getList({
+            search,
+            itemsPerPage: this.itemsPerPage,
+            pageNumber: 1,
+          })
+        ),
+        tap(({ items, total_count }) => {
+          this.users$$.next(items);
+          this.totalItems = total_count;
+        }),
+        tap(() => (this.currentPage = 1)),
         tap(() => this.isLoading$$.next(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
+
+    this.selectViewOption.valueChanges
+      .pipe(
+        tap((viewMode) => viewMode && (this.viewMode = viewMode)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
+  }
+
+  onPageChange(pageNumber: number): void {
+    const bodyReq: ListRequest = {
+      itemsPerPage: this.itemsPerPage,
+      search: this.searchInput.nativeElement.value.trim().toLowerCase(),
+      pageNumber,
+    };
+
+    this.isLoading$$.next(true);
+
+    this.usersService
+      .getList(bodyReq)
+      .pipe(
+        tap(({ items, total_count }) => {
+          this.users$$.next(items);
+          this.totalItems = total_count;
+        }),
+        tap(() => (this.currentPage = pageNumber)),
+        finalize(() => this.isLoading$$.next(false)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();

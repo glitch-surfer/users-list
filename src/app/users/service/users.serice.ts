@@ -25,16 +25,27 @@ export class UsersService {
     { id: 'u17', user_name: 'Ivan Q.', is_active: true },
   ];
 
-  getList(request?: ListRequest): Observable<UserListResponseDto> {
-    return of({ items: this.DB, total_count: this.DB.length }).pipe(
-      delay(DELAY)
-    );
+  getList(request: ListRequest): Observable<UserListResponseDto> {
+    return of(this.getItems(request)).pipe(delay(DELAY));
   }
 
-  searchByName(name: string): Observable<UserDto[]> {
-    return of(
-      this.DB.filter((user) => user.user_name.toLowerCase().includes(name))
-    ).pipe(delay(DELAY));
+  private getItems({
+    search,
+    itemsPerPage,
+    pageNumber,
+  }: ListRequest): UserListResponseDto {
+    const items = search
+      ? this.DB.filter((user) => user.user_name.toLowerCase().includes(search))
+      : this.DB;
+    const total_count = items.length;
+
+    return {
+      items: items.slice(
+        (pageNumber - 1) * itemsPerPage,
+        pageNumber * itemsPerPage
+      ),
+      total_count,
+    };
   }
 
   // getById(id: string): Observable<UserDto> {
