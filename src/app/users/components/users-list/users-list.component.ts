@@ -15,6 +15,7 @@ import {
 } from '../../service/users.serice';
 import {
   BehaviorSubject,
+  Observable,
   debounceTime,
   finalize,
   fromEvent,
@@ -118,25 +119,43 @@ export class UsersListComponent implements OnInit {
   }
 
   onPageChange(pageNumber: number): void {
-    const bodyReq: ListRequest = {
+    this.isLoading$$.next(true);
+
+    this.getUsers({
       itemsPerPage: this.itemsPerPage,
       search: this.searchInput.nativeElement.value.trim().toLowerCase(),
       pageNumber,
-    };
+    }).subscribe();
+  }
 
+  onRemoveUser(id: string): void {
     this.isLoading$$.next(true);
 
     this.usersService
-      .getList(bodyReq)
+      .remove(id)
       .pipe(
-        tap(({ items, total_count }) => {
-          this.users$$.next(items);
-          this.totalItems = total_count;
-        }),
-        tap(() => (this.currentPage = pageNumber)),
+        switchMap(() =>
+          this.getUsers({
+            pageNumber: this.currentPage,
+            itemsPerPage: this.itemsPerPage,
+            search: this.searchInput.nativeElement.value.trim().toLowerCase(),
+          })
+        ),
         finalize(() => this.isLoading$$.next(false)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
+  }
+
+  private getUsers(bodyReq: ListRequest): Observable<UserListResponseDto> {
+    return this.usersService.getList(bodyReq).pipe(
+      tap(({ items, total_count }) => {
+        this.users$$.next(items);
+        this.totalItems = total_count;
+      }),
+      tap(() => (this.currentPage = bodyReq.pageNumber)),
+      finalize(() => this.isLoading$$.next(false)),
+      takeUntilDestroyed(this.destroyRef)
+    );
   }
 }

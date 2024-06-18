@@ -52,9 +52,11 @@ export class UsersService {
   //   // TODO: implement
   // }
 
-  // remove(id: string): Observable<void> {
-  //   // TODO: implement
-  // }
+  remove(id: string): Observable<null> {
+    this.DB = this.DB.filter((user) => user.id !== id);
+
+    return of(null).pipe(delay(DELAY));
+  }
 }
 
 export interface UserDto {

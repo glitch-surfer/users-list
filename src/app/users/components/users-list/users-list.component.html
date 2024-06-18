@@ -29,9 +29,15 @@
 } @else {
 <ul class="users" [class.list-view]="viewMode === 'list'">
   @for (user of users$ | async; track user.id) { @if (viewMode === 'list') {
-  <app-user-row [user]="user"></app-user-row>
+  <app-user-row
+    [user]="user"
+    (removeUser)="onRemoveUser(user.id)"
+  ></app-user-row>
   } @else {
-  <app-user-card [user]="user"></app-user-card>
+  <app-user-card
+    [user]="user"
+    (removeUser)="onRemoveUser(user.id)"
+  ></app-user-card>
   } }
 </ul>
 } @if ((users$ | async)!.length < totalItems) {

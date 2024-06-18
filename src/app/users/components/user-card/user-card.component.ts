@@ -1,5 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { UserDto } from '../../service/users.serice';
+import { UserItem } from '../../model/user-item.interface';
 
 @Component({
   selector: 'app-user-card',
@@ -11,6 +18,7 @@ import { UserDto } from '../../service/users.serice';
         Name: <b>{{ user.user_name }}</b>
       </p>
       <p>Status: {{ user.is_active }}</p>
+      <button (click)="removeUser.emit()">Remove</button>
     </li>
   `,
   styles: `
@@ -22,6 +30,7 @@ import { UserDto } from '../../service/users.serice';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserCardComponent {
+export class UserCardComponent implements UserItem {
   @Input({ required: true }) user!: UserDto;
+  @Output() removeUser = new EventEmitter<void>();
 }
