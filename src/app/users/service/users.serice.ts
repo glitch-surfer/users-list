@@ -29,6 +29,17 @@ export class UsersService {
     return of(this.getItems(request)).pipe(delay(DELAY));
   }
 
+  // TODO: remove since it's not used
+  getById(id: string): Observable<UserDto | null> {
+    return of(this.DB.find((user) => user.id === id) ?? null).pipe(delay(DELAY));
+  }
+
+  remove(id: string): Observable<null> {
+    this.DB = this.DB.filter((user) => user.id !== id);
+
+    return of(null).pipe(delay(DELAY));
+  }
+
   private getItems({
     search,
     itemsPerPage,
@@ -46,16 +57,6 @@ export class UsersService {
       ),
       total_count,
     };
-  }
-
-  // getById(id: string): Observable<UserDto> {
-  //   // TODO: implement
-  // }
-
-  remove(id: string): Observable<null> {
-    this.DB = this.DB.filter((user) => user.id !== id);
-
-    return of(null).pipe(delay(DELAY));
   }
 }
 
