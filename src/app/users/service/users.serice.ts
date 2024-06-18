@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, delay, of } from 'rxjs';
-
-const DELAY = 1000;
+import { DELAY } from '../const/numbers';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
@@ -31,7 +30,9 @@ export class UsersService {
 
   // TODO: remove since it's not used
   getById(id: string): Observable<UserDto | null> {
-    return of(this.DB.find((user) => user.id === id) ?? null).pipe(delay(DELAY));
+    return of(this.DB.find((user) => user.id === id) ?? null).pipe(
+      delay(DELAY)
+    );
   }
 
   remove(id: string): Observable<null> {

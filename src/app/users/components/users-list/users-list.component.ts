@@ -32,6 +32,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PaginationComponent } from '../../../core/components/pagination/pagination.component';
 import { ViewMode } from '../../model/view-mode.interface';
 import { ItemsPerPage } from '../../model/items-per-page.interface';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '../../const/numbers';
 
 @Component({
   selector: 'app-users-list',
@@ -74,8 +75,8 @@ export class UsersListComponent implements OnInit {
 
   readonly selectItemsPerPage = new FormControl<ItemsPerPage>(5);
 
-  itemsPerPage: ItemsPerPage = 5;
-  currentPage = 1;
+  itemsPerPage: ItemsPerPage = DEFAULT_PAGE_SIZE;
+  currentPage = DEFAULT_PAGE_NUMBER;
   totalItems = this.usersData.total_count;
 
   ngOnInit(): void {
@@ -90,14 +91,14 @@ export class UsersListComponent implements OnInit {
           this.usersService.getList({
             search,
             itemsPerPage: this.itemsPerPage,
-            pageNumber: 1,
+            pageNumber: DEFAULT_PAGE_NUMBER,
           })
         ),
         tap(({ items, total_count }) => {
           this.users$$.next(items);
           this.totalItems = total_count;
         }),
-        tap(() => (this.currentPage = 1)),
+        tap(() => (this.currentPage = DEFAULT_PAGE_NUMBER)),
         tap(() => this.isLoading$$.next(false)),
         takeUntilDestroyed(this.destroyRef)
       )
@@ -115,7 +116,7 @@ export class UsersListComponent implements OnInit {
         tap(
           (itemsPerPage) => itemsPerPage && (this.itemsPerPage = itemsPerPage)
         ),
-        tap(() => (this.currentPage = 1)),
+        tap(() => (this.currentPage = DEFAULT_PAGE_NUMBER)),
         tap(() => this.onPageChange(this.currentPage)),
         takeUntilDestroyed(this.destroyRef)
       )

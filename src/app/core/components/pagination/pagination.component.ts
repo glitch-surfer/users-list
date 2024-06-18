@@ -7,6 +7,10 @@ import {
 } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { ItemsPerPage } from '../../../users/model/items-per-page.interface';
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+} from '../../../users/const/numbers';
 
 @Component({
   selector: 'app-pagination',
@@ -17,9 +21,9 @@ import { ItemsPerPage } from '../../../users/model/items-per-page.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginationComponent {
-  @Input({ required: true }) itemsPerPage: ItemsPerPage = 5;
+  @Input({ required: true }) itemsPerPage: ItemsPerPage = DEFAULT_PAGE_SIZE;
   @Input({ required: true }) totalItems = 0;
-  @Input({ required: true }) currentPage = 1;
+  @Input({ required: true }) currentPage = DEFAULT_PAGE_NUMBER;
   @Input() isDisabled = false;
 
   @Output() pageChange = new EventEmitter<number>();
